@@ -3,6 +3,8 @@ $fn = 80;
 include <stepper28BYJ.scad>
 include <HC_SR04.scad>
 
+bHead = false; 
+bBushing = true;
 
 dMotore = 28.1;
 
@@ -51,28 +53,36 @@ module MotorBushing() {
     }
 }
 
+bAll = !bHead && !bBushing;
 
-union() {
-/*
-    // Supporto Motore
-    difference() {
-        translate([0, 0, 12.5])
-            cube([50, 50, 25], center = true);
-        translate([0, 0, 25-19])
-            cylinder(d=dMotore, h=45);
-    }
-*/    
-    // Motore
-    translate([0, 0, 25-18.5])
-        stepper28BYJ();
-    translate([0, 8, 25+3]) {
-        // Boccola
-        MotorBushing();
-        // Testa U-S
-        translate([0, 6, 26])
-            rotate([90, 0, 0])
-                head(true);
-    }
+if(bAll) {
+    union() {
+    /*
+        // Supporto Motore
+        difference() {
+            translate([0, 0, 12.5])
+                cube([50, 50, 25], center = true);
+            translate([0, 0, 25-19])
+                cylinder(d=dMotore, h=45);
+        }
+    */    
+        // Motore
+        translate([0, 0, 25-18.5])
+            stepper28BYJ();
+        translate([0, 8, 25+3]) {
+            // Boccola
+            MotorBushing();
+            // Testa U-S
+            translate([0, 6, 26])
+                rotate([90, 0, 0])
+                    head(true);
+        }
 
+    }
 }
-
+else {
+    if(bHead)
+        head(false);
+    else if(bBushing)
+        MotorBushing();
+}
