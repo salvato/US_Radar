@@ -43,9 +43,9 @@ module head(bWithUsModule) {
 module MotorBushing() {
     #difference() {
         translate([0, 0, 0.1])
-           cylinder(d=10, h=7);
+           cylinder(d=10, h=11);
         #intersection() {
-            cylinder(r=5/2, h=9);
+            cylinder(r=5/2, h=13);
             cube([3, 6, 9], center=true);
         }
     }
@@ -65,10 +65,11 @@ union() {
     // Motore
     translate([0, 0, 25-18.5])
         stepper28BYJ();
-    // Boccola
     translate([0, 8, 25+3]) {
+        // Boccola
         MotorBushing();
-        translate([0, 6, 22])
+        // Testa U-S
+        translate([0, 6, 26])
             rotate([90, 0, 0])
                 head(true);
     }
