@@ -21,13 +21,13 @@ module opticalLimit() {
     }
 }
 
-module head(bWithUsModule) {
-hDist = 27;// Distance between sensor holes
-hD    = 18;// Hole diameter
-rExt  = 26;
-pcbX = 45;
-pcbY = 20;
-pcbZ = 1.2;
+module head() {
+    hDist = 27;// Distance between sensor holes
+    hD    = 18;// Hole diameter
+    rExt  = 26;
+    pcbX = 45;
+    pcbY = 20;
+    pcbZ = 1.2;
     rotate([0, 0, 180]) {
         translate([-((16+27)/2+1), -(18/2+1), 0]) {
             union() {
@@ -53,46 +53,11 @@ pcbZ = 1.2;
                             cylinder(d=10.5, h=8);
                 }
                 // limit bar
-                translate([60, 34, 10])
-                    cube([2, 34, 2], center=true);
+                translate([60, 27, 11])
+                    cube([2, 27, 2], center=true);
             }
         }
     }
-    /*
-    rExt= 35/2;
-    difference() {
-        rotate([0, 0, 180]) {
-            translate([-((16+27)/2+1), -(18/2+1), 0]) {
-                union() {
-                    difference() {
-                        hull() {
-                            translate([16/2+1, 18/2+1, 0])
-                                cylinder(r=rExt, h=12);
-                            translate([16/2+27+1, 18/2+1, 0])
-                                cylinder(r=rExt, h=12);
-                        }
-                        union() {
-                            translate([-0.05, -0.05, -0.1])
-                                cube([45.1, 20.1, 5]);
-                            translate([0, 0, 5-1.5])
-                                HC_SR04();
-                            translate([18.5-3.5, -10, -0.2])
-                                cube([14, 10, 5]);
-                        }
-                    }
-                    // limit bar
-                    translate([52, 12, 10])
-                        cube([1, 24, 2]);
-                    if(bWithUsModule)
-                        translate([0, 0, 5-1.5])
-                            HC_SR04();
-                }// end union()
-            }
-        }
-        translate([0, -12, 6])
-            rotate([90, 0, 0])
-                cylinder(d= 10.5, h= 8);
-    }*/
 }
 
 
@@ -107,25 +72,30 @@ module motorBushing() {
     }
 }
 
+
+module supportoMotore() {
+    difference() {
+        translate([0, 0, 12.5])
+            cube([100, 50, 25], center = true);
+        translate([0, 0, 25-19])
+            cylinder(d=dMotore, h=45);
+        // Scasso per Sensore ottico
+        translate([-45, -3, 23])
+            cube([24, 12, 2.5]);
+        translate([-52, 1, 23])
+            cube([0, 4, 2.5]);
+        translate([-9, -30, 21])
+            cube([18, 20, 5]);
+    }
+}
+
+
 bAll = !bHead && !bBushing && !bLimit;
 
 if(bAll) {
     union() {
         // Supporto Motore
-        difference() {
-            translate([0, 0, 12.5])
-                cube([100, 50, 25], center = true);
-            translate([0, 0, 25-19])
-                cylinder(d=dMotore, h=45);
-            // Scasso per Sensore ottico
-            translate([-45, -3, 23])
-                cube([24, 12, 2.5]);
-            translate([-52, 1, 23])
-                cube([0, 4, 2.5]);
-            translate([-9, -30, 21])
-                cube([18, 20, 5]);
-        }
-       
+        supportoMotore();
         // Motore
         translate([0, 0, 25-18.5])
             stepper28BYJ();
@@ -133,17 +103,17 @@ if(bAll) {
             // Boccola
             motorBushing();
             // Testa U-S
-            translate([0, 6, 46])
+            translate([0, 6, 30])
                 rotate([90, 0, 0])
                     head(true);
             // Limit Sensor
-            translate([-44, -10, -6])
+            translate([-51, -10, -6])
                 opticalLimit();
-            // US module
-//            translate([0, 0, 0])
-//                HC_SR04();
         }
-
+        // US module
+        translate([45/2, 12, 68])
+            rotate([90, 180, 0])
+                HC_SR04();
     }
 }
 else {
