@@ -34,3 +34,14 @@ module stepper28BYJ() {
         }
     }
 }//end of stepper28BYJ module wrapper
+
+
+module mountingLug() {
+    difference() {
+        hull() {
+            cylinder(r=7/2, h=0.5);
+            translate([0,-7/2,0]) cube([7,7,0.5]);
+        }
+        translate([0,0,-1]) cylinder(r=4.2/2, h=2);
+    }
+}
