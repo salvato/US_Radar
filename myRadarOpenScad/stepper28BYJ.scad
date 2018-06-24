@@ -1,11 +1,11 @@
-$fn = 80;
 
 // 28BYJ-48 Stepper Motor Model
 // Mark Benson
 // 23/07/2013
 // Creative Commons Non Commerical
 // http://www.thingiverse.com/thing:122070
-module stepper28BYJ() {
+module stepper28BYJ(fn) {
+    $fn = fn;
     difference() {
         union()	{
             //Body
@@ -19,14 +19,16 @@ module stepper28BYJ() {
                 cube([3, 6, 9],center=true);
             }
             //Left mounting lug
-            color("SILVER") translate([-35/2,0,18.5]) mountingLug();
+            color("SILVER") translate([-35/2,0,18.5]) mountingLug(fn);
             //Right mounting lug
-            color("SILVER") translate([35/2,0,18.5]) rotate([0,0,180]) mountingLug();
+            color("SILVER") translate([35/2,0,18.5]) rotate([0,0,180]) mountingLug(fn);
+            //
             difference() {
                 //Cable entry housing
                 color("BLUE") translate([-17.5/2,-17,1.9]) cube([17.5,17,17]);
-                cylinder(r=27/2, h=29);
+                translate([0, 0, 0.1]) cylinder(r=27/2, h=29);
             }
+            //
         }
         union() {
             //Flat on motor shaft
@@ -36,7 +38,8 @@ module stepper28BYJ() {
 }//end of stepper28BYJ module wrapper
 
 
-module mountingLug() {
+module mountingLug(fn) {
+    $fn = fn;
     difference() {
         hull() {
             cylinder(r=7/2, h=0.5);
@@ -45,3 +48,5 @@ module mountingLug() {
         translate([0,0,-1]) cylinder(r=4.2/2, h=2);
     }
 }
+
+//stepper28BYJ(80);

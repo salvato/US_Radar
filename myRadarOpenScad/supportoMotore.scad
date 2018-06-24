@@ -1,7 +1,7 @@
-$fn = 80;
 
 
-module supportoMotore() {
+module supportoMotore(fn) {
+    $fn = fn;
     translate([0, -8, 0]) {
         union() {
             // Base
@@ -20,18 +20,24 @@ module supportoMotore() {
                 translate([0, 0, -1])
                    cylinder(d=25, h=7);
             }
-            // Supporto Vite motore sinistra
             difference() {
-                translate([-17.5, 0, 0])
-                    cylinder(d=7, h=25);
-                translate([-17.5, 0, 10])
-                    cylinder(d=2.5, h=16);
-            }
-            difference() {
-                translate([17.5, 0, 0])
-                    cylinder(d=7, h=25);
-                translate([17.5, 0, 10])
-                    cylinder(d=2.5, h=16);
+                union() {
+                    // Supporto Vite motore sinistra
+                    difference() {
+                        translate([-17.5, 0, 0])
+                            cylinder(d=7, h=25);
+                        translate([-17.5, 0, 10])
+                            cylinder(d=2.5, h=16);
+                    }
+                    difference() {
+                        translate([17.5, 0, 0])
+                            cylinder(d=7, h=25);
+                        translate([17.5, 0, 10])
+                            cylinder(d=2.5, h=16);
+                    }
+                }
+                translate([0, 0, 5.1])
+                   cylinder(d=29, h=25);
             }
             // Supporto per Sensore ottico
             difference() {
@@ -44,4 +50,4 @@ module supportoMotore() {
     }
 }
 
-supportoMotore();
+//supportoMotore(80);

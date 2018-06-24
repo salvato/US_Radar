@@ -1,7 +1,7 @@
-$fn = 80;
 
 
-module motorBushing() {
+module motorBushing(fn) {
+    $fn = fn;
     #difference() {
         translate([0, 0, 0.1])
            cylinder(d=10, h=11);
@@ -13,4 +13,4 @@ module motorBushing() {
 }
 
 // 
-//motorBushing();
+//motorBushing(80);

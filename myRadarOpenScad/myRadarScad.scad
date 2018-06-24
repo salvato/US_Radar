@@ -26,42 +26,36 @@ all(teta);
 module all(alfa) {
     union() {
         // Supporto Motore
-        color("yellow") supportoMotore();
+        color("yellow") supportoMotore($fn);
+        //
         // Motore
         translate([0, -8, 25-18.5])
-            stepper28BYJ();
+            stepper28BYJ($fn);
+        //
         // Boccola
-        translate([0, 0, 25+3])
-            color("yellow") motorBushing();
+        rotate([0, 0, alfa])
+            translate([0, 0, 25+3])
+                motorBushing($fn);
+        //
         // Testa + sensore US
         rotate([0, 0, alfa])
             union() {
                 // Testa U-S
                 translate([0, 0, 58])
                     rotate([90, 0, 0])
-                        color("blue") US_head();
+                        color("blue") US_head($fn);
+                //
                 // US module
                 rotate([0, 0, 0])
                     translate([45/2, 4, 68])
                         rotate([90, 180, 0])
-                            HC_SR04();
+                            HC_SR04($fn);
+                //
             }
-            //
+        //
         // Limit Sensor
         translate([-40, 0, 22])
-            opticalLimit();
+            opticalLimit($fn);
+        //
     }// End union()
 }
-
-
-/*
-else {
-    if(bHead)
-        head(false);
-    else if(bBushing)
-        motorBushing();
-    else if(bLimit)
-        opticalLimit();
-}
-*/
-

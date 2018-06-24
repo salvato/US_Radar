@@ -1,4 +1,3 @@
-$fn = 80;
 
 //HC-SR04 Ultrasonic distance sensor module
 //Mark Benson
@@ -16,7 +15,8 @@ pcbX = 45;
 pcbY = 20;
 pcbZ = 1.2;
 
-module HC_SR04() {
+module HC_SR04(fn) {
+    $fn = fn;
     difference() {
         union() 	{
             color("DARKBLUE") cube([pcbX, pcbY, pcbZ]);// PCB
@@ -82,4 +82,4 @@ module headerPin(numberOfPins) {
 //Call model - comment out when including this file in another model
 //ultrasonicSensor();
 
-//HC_SR04();
+//HC_SR04(80);

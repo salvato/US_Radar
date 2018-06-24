@@ -1,6 +1,6 @@
-$fn = 80;
 
-module US_head() {
+module US_head(fn) {
+    $fn = fn;
     hDist = 27;// Distance between sensor holes
     hD    = 18;// Hole diameter
     rExt  = 26;
@@ -38,6 +38,14 @@ module US_head() {
                 }
             }
         }
+        translate([20, 7.5, -4])
+            cylinder(d=1.5, h=4);
+        translate([20, -7.5, -4])
+            cylinder(d=1.5, h=4);
+        translate([-20, -7.5, -4])
+            cylinder(d=1.5, h=4);
+        translate([-20,  7.5, -4])
+            cylinder(d=1.5, h=4);
         // Smile
         translate([0, -12, 7])
             difference() {
@@ -51,5 +59,5 @@ module US_head() {
 }
 
 //
-//US_head();
+//US_head(80);
 

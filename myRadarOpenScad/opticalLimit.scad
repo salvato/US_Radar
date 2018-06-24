@@ -1,7 +1,7 @@
-$fn = 80;
 
 
-module opticalLimit() {
+module opticalLimit(fn) {
+    $fn = fn;
     union() {
         //PCB
         translate([0, 0, 1.25])
