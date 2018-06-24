@@ -1,4 +1,4 @@
-$fn = 80;
+$fn = 20;
 
 include <stepper28BYJ.scad>
 include <HC_SR04.scad>
@@ -6,6 +6,7 @@ include <US_head.scad>
 include <opticalLimit.scad>
 include <motorBushing.scad>
 include <supportoMotore.scad>
+include <ArduinoNano.scad>
 
 bHead         = false; 
 bBushing      = false;
@@ -39,23 +40,25 @@ module all(alfa) {
         //
         // Testa + sensore US
         rotate([0, 0, alfa])
-            union() {
-                // Testa U-S
-                translate([0, 0, 58])
-                    rotate([90, 0, 0])
-                        color("blue") US_head($fn);
-                //
-                // US module
-                rotate([0, 0, 0])
-                    translate([45/2, 4, 68])
-                        rotate([90, 180, 0])
-                            HC_SR04($fn);
-                //
+            translate([0, 0, 58]) {
+                rotate([90, 0, 0]) {
+                    union() {
+                        US_head(20);
+                        rotate([0, 0, 180])
+                            translate([-45/2, -10, -4])
+                                HC_SR04(20);
+                    }
+                }
             }
         //
         // Limit Sensor
         translate([-40, 0, 22])
             opticalLimit($fn);
+        //
+        // Arduino Nano
+        translate([0, 40, 12])
+            rotate([0, 0, 0])
+                ArduinoNano($fn);
         //
     }// End union()
 }

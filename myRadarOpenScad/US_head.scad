@@ -1,3 +1,4 @@
+include <HC_SR04.scad>
 
 module US_head(fn) {
     $fn = fn;
@@ -18,16 +19,26 @@ module US_head(fn) {
                             translate([16/2+27+1, 18/2+1, 0])
                                 cylinder(r=rExt, h=12);
                         }
+                        //
+                        // Sensor1 hole
                         translate([16/2+1, 18/2+1, -1])
-                            cylinder(d=hD, h=14);// Sensor1 hole
-                        translate([16/2+27+1, 18/2+1, -1])// Sensor2 hole
                             cylinder(d=hD, h=14);
+                        //
+                        // Sensor2 hole
+                        translate([16/2+27+1, 18/2+1, -1])
+                            cylinder(d=hD, h=14);
+                        //
+                        // Xtal space
                         translate([(pcbX)/2, pcbY-4, +5.0])
-                            cube([11,8, 5], center=true);// Xtal space
+                            cube([11,8, 5], center=true);
+                        //
+                        // PCB space
                         translate([-0.5, -0.5, -1.0])
-                            cube([pcbX+1, pcbY+1, 5]);// PCB space
+                            cube([pcbX+1, pcbY+1, 5]);
+                        //
+                        // Space for cabling
                         translate([18.5-3.5, -17, -0.2])
-                            cube([14, 18, 5]);// Space for cabling
+                            cube([14, 18, 5]);
                         translate([(pcbX)/2, 37, 6])
                             rotate([90, 0, 0])
                                 cylinder(d=10.5, h=8);
@@ -35,9 +46,12 @@ module US_head(fn) {
                     // limit bar
                     translate([60, 27, 6])
                         cube([2, 27, 12], center=true);
+                    //
                 }
             }
         }
+        //
+        // Holes for US Sensor screws
         translate([20, 7.5, -4])
             cylinder(d=1.5, h=4);
         translate([20, -7.5, -4])
@@ -46,6 +60,7 @@ module US_head(fn) {
             cylinder(d=1.5, h=4);
         translate([-20,  7.5, -4])
             cylinder(d=1.5, h=4);
+        //
         // Smile
         translate([0, -12, 7])
             difference() {
@@ -58,6 +73,9 @@ module US_head(fn) {
     }
 }
 
-//
-//US_head(80);
-
+/*
+US_head(20);
+rotate([0, 0, 180])
+    translate([-22.5, -10, -4])
+        HC_SR04(20);
+*/
