@@ -7,6 +7,7 @@ include <opticalLimit.scad>
 include <motorBushing.scad>
 include <supportoMotore.scad>
 include <ArduinoNano.scad>
+include <StepperDriver.scad>
 
 bHead         = false; 
 bBushing      = false;
@@ -58,7 +59,11 @@ module all(alfa) {
         // Arduino Nano
         translate([0, 40, 12])
             rotate([0, 0, 0])
-                ArduinoNano($fn);
+                ArduinoNano($fn, false);
         //
+        // StepperDriver
+        translate([-40, 20, 12])
+            rotate([0, 0, 0])
+                StepperDriver($fn, true);
     }// End union()
 }

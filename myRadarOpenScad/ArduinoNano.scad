@@ -1,12 +1,11 @@
 //Gabriele Salvato
 //23/06/2018
 
-pcbX = 43.18;
-pcbY = 17.78;
-pcbZ = 1.2;
-
 
 module USB_Female(fn) {
+    pcbX = 43.18;
+    pcbY = 17.78;
+    pcbZ = 1.2;
     $fn= fn;
     color("silver")
     difference() {
@@ -41,7 +40,7 @@ module pushButton(fn) {
 }
 
 
-module ArduinoNano(fn) {
+module ArduinoNano(fn, bPins) {
     $fn = fn;
     union() {
         difference() {
@@ -69,10 +68,12 @@ module ArduinoNano(fn) {
             rotate([0, 0, 45])
                 cube([6.90, 6.90, 1.20], center=true);
         // Pin Headers
-        translate([-(pcbX-3*2.54)/2, (pcbY-2.54)/2, -0.2]) 
-            rotate([180,0,0]) headerPin(15);
-        translate([-(pcbX-3*2.54)/2, -(pcbY-2.54)/2, -0.2]) 
-            rotate([180,0,0]) headerPin(15);
+        if(bPins) {
+            translate([-(pcbX-3*2.54)/2, (pcbY-2.54)/2, -0.2]) 
+                rotate([180,0,0]) headerPin(15);
+            translate([-(pcbX-3*2.54)/2, -(pcbY-2.54)/2, -0.2]) 
+                rotate([180,0,0]) headerPin(15);
+        }
         //
         // Push Button
         translate([-2, 0, pcbZ]) 
@@ -96,5 +97,5 @@ module headerPin(numberOfPins) {
 //Example call to headerPin module. The integer passed in defines the number of pins in the model
 //headerPin(4);
 
-//ArduinoNano(80);
+//ArduinoNano(80, false);
 //USB_Female(80);
