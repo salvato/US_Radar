@@ -32,7 +32,7 @@ module all(alfa) {
             stepper28BYJ();
         // Boccola
         translate([0, 0, 25+3])
-            motorBushing();
+            color("yellow") motorBushing();
         // Testa + sensore US
         rotate([0, 0, alfa])
             union() {
