@@ -16,30 +16,45 @@ dMotore = 28.1;
 
 bAll = !bHead && !bBushing && !bLimit;
 
-if(bAll) {
+
+function rotation(t) = t*360.0;
+
+teta = rotation($t);
+all(teta);
+
+
+module all(alfa) {
     union() {
         // Supporto Motore
-        supportoMotore();
+        color("yellow") supportoMotore();
         // Motore
-        translate([0, 0, 25-18.5])
+        translate([0, -8, 25-18.5])
             stepper28BYJ();
-        translate([0, 8, 25+3]) {
-            // Boccola
+        // Boccola
+        translate([0, 0, 25+3])
             motorBushing();
-            // Testa U-S
-            translate([0, 6, 30])
-                rotate([90, 0, 0])
-                    US_head();
-            // Limit Sensor
-            translate([-51, -10, -6])
-                opticalLimit();
-        }
-        // US module
-        translate([45/2, 12, 68])
-            rotate([90, 180, 0])
-                HC_SR04();
+        // Testa + sensore US
+        rotate([0, 0, alfa])
+            union() {
+                // Testa U-S
+                translate([0, 0, 58])
+                    rotate([90, 0, 0])
+                        US_head();
+                // US module
+                rotate([0, 0, 0])
+                    translate([45/2, 4, 68])
+                        rotate([90, 180, 0])
+                            HC_SR04();
+            }
+            //
+        // Limit Sensor
+        translate([-40, 0, 22])
+            opticalLimit();
     }// End union()
 }
+
+
+/*
 else {
     if(bHead)
         head(false);
@@ -48,3 +63,5 @@ else {
     else if(bLimit)
         opticalLimit();
 }
+*/
+

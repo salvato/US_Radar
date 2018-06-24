@@ -8,7 +8,7 @@ module US_head() {
     pcbY = 20;
     pcbZ = 1.2;
     rotate([0, 0, 180]) {
-        translate([-((16+27)/2+1), -(18/2+1), 0]) {
+        translate([-((16+27)/2+1), -(18/2+1), -6]) {
             union() {
                 difference() {
                     hull() {
@@ -32,8 +32,8 @@ module US_head() {
                             cylinder(d=10.5, h=8);
                 }
                 // limit bar
-                translate([60, 27, 11])
-                    cube([2, 27, 2], center=true);
+                translate([60, 27, 6])
+                    cube([2, 27, 12], center=true);
             }
         }
     }
