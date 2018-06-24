@@ -39,7 +39,7 @@ module all(alfa) {
                 // Testa U-S
                 translate([0, 0, 58])
                     rotate([90, 0, 0])
-                        US_head();
+                        color("blue") US_head();
                 // US module
                 rotate([0, 0, 0])
                     translate([45/2, 4, 68])
