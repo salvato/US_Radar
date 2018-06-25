@@ -1,6 +1,7 @@
 //Gabriele Salvato
 //23/06/2018
 
+include <headerPin.scad>
 
 module StepperDriver(fn, bPins) {
     pcbX = 29.0;
@@ -45,20 +46,22 @@ module StepperDriver(fn, bPins) {
                 cube([6, 15, 7], center=true);
                 translate([0, 0, 1])
                     cube([5, 14, 7], center=true);
+                translate([-2, 0, 1])
+                    cube([0.5, 17, 7], center=true);
             }
         }
+        translate([-pcbX/2+10, -(2.54*4)/2, pcbZ+3.5])
+            rotate([0, 0, 90])
+                connectorPin(5);
     }
 }
 
 
-module headerPin(numberOfPins) {
+module connectorPin(numberOfPins) {
 	for (i = [0:numberOfPins-1]) {
 		color("GOLD") 
         translate([(i*2.54),0,-2]) 
-            cube([0.5, 0.5, 8]);
-		color("BLACK") 
-        translate([(i*2.54-2.54/2+0.25),-2.54/2+0.25,0]) 
-            cube([2.54, 2.54, 1]);
+            cube([0.25, 0.25, 5]);
 	}
 }
 

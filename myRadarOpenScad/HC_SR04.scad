@@ -8,6 +8,8 @@
 //Gabriele Salvato
 //23/06/2018
 
+include <headerPin.scad>
+
 sD = 16;  // Sensor diameter
 sH = 13.8;// Sensor Height
 dS = 27;  // Distance between Sensors
@@ -67,17 +69,6 @@ module xtal() {
 	}
 }
 
-
-module headerPin(numberOfPins) {
-	for (i = [0:numberOfPins-1]) {
-		color("GOLD") translate([(i*2.54),0,-2]) cube([0.5,0.5,8]);
-		color("BLACK") translate([(i*2.54-2.54/2+0.25),-2.54/2+0.25,0]) cube([2.54,2.54,1]);
-	}
-}
-
-
-//Example call to headerPin module. The integer passed in defines the number of pins in the model
-//headerPin(4);
 
 //Call model - comment out when including this file in another model
 //ultrasonicSensor();
