@@ -6,7 +6,7 @@ module supportoMotore(fn) {
         union() {
             // Base
             difference() {
-                cylinder(d=120, h=5);
+                cylinder(d=120, h=2);
                 for(alfa=[0:90:269]) {
                     rotate([0, 0, alfa])
                         translate([0, -35, -1])

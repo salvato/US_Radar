@@ -74,7 +74,9 @@ module US_head(fn) {
 }
 
 /*
-US_head(20);
+US_head(80);
+//
+//
 rotate([0, 0, 180])
     translate([-22.5, -10, -4])
         HC_SR04(20);
