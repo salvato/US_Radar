@@ -1,4 +1,4 @@
-#define LOG_VERBOSE
+//#define LOG_VERBOSE
 
 #ifdef LOG_VERBOSE
 #include <QDebug>
@@ -308,7 +308,7 @@ MainWindow::executeCommand(QByteArray command) {
         #ifdef LOG_VERBOSE
             qDebug() << QString("Steps per turn: %1")
                        .arg(stepsPerTurn);
-            #endif
+        #endif
         return true;
     }
 

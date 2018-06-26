@@ -50,8 +50,8 @@ const byte Motor[8] = //half-stepping
 //////////////////////////////////////////////////////////
 const int16_t Micro_switch = 4;
 
-const int16_t Trigger_Pin =  5;
-const int16_t Echo_Pin    =  6;
+const int16_t Trigger_Pin =  3;
+const int16_t Echo_Pin    =  2;
 
 //const int16_t Step_In4  =  8;// Do not change !!
 //const int16_t Step_In3  =  9;// They are accessed
@@ -363,6 +363,7 @@ executeCommand() {
         return true;
     }
     else if(command == byte(StopSending)) {
+      motorOff();
         bSendValues = false;
         return true;
     }
