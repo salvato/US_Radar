@@ -34,6 +34,9 @@ enum commands {
 };
 
 // ----- motor pattern
+// Winding    A  B  A  B
+// Motor Pin  1  2  3  4
+// Color      Bl Pi Ye Or
 const byte Motor[8] = //half-stepping
 { B00001000,
   B00001100,
@@ -44,6 +47,19 @@ const byte Motor[8] = //half-stepping
   B00000001,
   B00001001
 };
+
+
+/*
+ * 
+const byte Motor[4] = //full-stepping
+{ B00001100,
+  B00000110,
+  B00000011,
+  B00001001
+};
+ * 
+ */
+
 
 //////////////////////////////////////////////////////////
 // Used Pins on the Arduino
