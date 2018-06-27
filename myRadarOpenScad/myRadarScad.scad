@@ -41,7 +41,7 @@ module all(alfa) {
         //
         // Testa + sensore US
         rotate([0, 0, alfa])
-            translate([0, 0, 58]) {
+            translate([0, 0, 77]) {
                 rotate([90, 0, 0]) {
                     union() {
                         US_head(20);

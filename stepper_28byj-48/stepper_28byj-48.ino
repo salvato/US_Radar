@@ -1,3 +1,4 @@
+#define FULL_STEP 1
 
 //////////////////////////////////////////////////////////
 // Fuction prototypes
@@ -37,26 +38,35 @@ enum commands {
 // Winding    A  B  A  B
 // Motor Pin  1  2  3  4
 // Color      Bl Pi Ye Or
-const byte Motor[8] = //half-stepping
-{ B00001000,
-  B00001100,
-  B00000100,
-  B00000110,
-  B00000010,
-  B00000011,
-  B00000001,
-  B00001001
-};
-
+#ifdef FULL_STEP
+  const int nStep = 4;
+  const byte Motor[nStep] = //full-stepping
+  { B00001100,
+    B00000110,
+    B00000011,
+    B00001001
+  };
+//  { B00001100,
+//    B00000110,
+//    B00000011,
+//    B00001001
+//  };
+#else
+  const int nStep = 8;
+  const byte Motor[nStep] = //half-stepping
+  { B00001000,
+    B00001100,
+    B00000100,
+    B00000110,
+    B00000010,
+    B00000011,
+    B00000001,
+    B00001001
+  };
+#endif
 
 /*
  * 
-const byte Motor[4] = //full-stepping
-{ B00001100,
-  B00000110,
-  B00000011,
-  B00001001
-};
  * 
  */
 
@@ -251,7 +261,7 @@ measure() {
 void
 rotate() {
     if(!moveClockwise) {// ----- counter-clockwise scan
-        for(int i=7; i>=0; i--) {
+        for(int i=nStep-1; i>=0; i--) {
             // ----- rotate motor to next step
             Pattern = PORTB;                //get current motor pattern
             Pattern = Pattern & B11110000;  //preserve MSN
@@ -261,7 +271,7 @@ rotate() {
         }
     }
     else {// ----- clockwise scan
-        for(int i=0; i<8; i++) {
+        for(int i=0; i<nStep; i++) {
             // ----- rotate motor to next step
             Pattern = PORTB;                //get current motor pattern
             Pattern = Pattern & B11110000;  //preserve MSN
