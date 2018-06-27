@@ -46,11 +46,6 @@ enum commands {
     B00000011,
     B00001001
   };
-//  { B00001100,
-//    B00000110,
-//    B00000011,
-//    B00001001
-//  };
 #else
   const int nStep = 8;
   const byte Motor[nStep] = //half-stepping
