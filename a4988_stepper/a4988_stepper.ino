@@ -36,8 +36,8 @@ enum commands {
 
 const bool    Disable            = HIGH;
 const bool    Enable             = LOW;
-const int32_t Motor_Delay        = 100;// To give motor shaft time to move
-const int16_t stepsPerRevolution = 48;// change to fit your motor
+const int32_t Motor_Delay        = 1;// To give motor shaft time to move
+const int16_t stepsPerRevolution = 200;// change to fit your motor
 const int16_t maxMessageLen      = 64;
 const bool    EndStop_Present    = false;//no end-stop micro-switch = false
 const int32_t baudRate           = 115200;// ----- serial port
@@ -142,7 +142,7 @@ setup() {
 
 void 
 loop() {
-    for(Angle=0; Angle<stepsPerRevolution; Angle++) {
+    for(Angle=0; Angle<=stepsPerRevolution; Angle++) {
         serialEvent();
         if(allReceived) {
             executeCommand();
@@ -150,9 +150,9 @@ loop() {
         }
         if(!bSendValues) break;
         measure();
-        sendValues(ValuesMark, Angle, Distance);
         rotate();
-        delay(Motor_Delay);         //slows rotational speed
+        sendValues(ValuesMark, Angle, Distance);
+        //delay(Motor_Delay);         //slows rotational speed
         /* ----- send the results to the display
         Serial.print("Angle: ");     Serial.print(Angle);
         Serial.print(" Distance: "); Serial.print(Distance);
@@ -161,10 +161,10 @@ loop() {
     }
     moveClockwise = !moveClockwise;
     digitalWrite(Motor_Enable, Disable);
-    delay(1000);
+    delay(Motor_Delay);
     digitalWrite(Motor_Enable, Enable);
     digitalWrite(Motor_Direction, moveClockwise ? HIGH : LOW);
-    for(Angle=stepsPerRevolution; Angle>0; Angle--) {
+    for(Angle=stepsPerRevolution; Angle>=0; Angle--) {
         serialEvent();
         if(allReceived) {
             executeCommand();
@@ -172,19 +172,18 @@ loop() {
         }
         if(!bSendValues) break;
         measure();
-        sendValues(ValuesMark, Angle, Distance);
         rotate();
+        sendValues(ValuesMark, Angle, Distance);
         /* ----- send the results to the display
         Serial.print("Angle: ");     Serial.print(Angle);
         Serial.print(" Distance: "); Serial.print(Distance);
         Serial.print(" Switch: ");   Serial.println(digitalRead(Micro_switch));
         */
-        delay(Motor_Delay);         //slows rotational speed
     }
     moveClockwise = !moveClockwise;
-    digitalWrite(Motor_Direction, moveClockwise ? HIGH : LOW);
     digitalWrite(Motor_Enable, Disable);
-    delay(1000);
+    digitalWrite(Motor_Direction, moveClockwise ? HIGH : LOW);
+    delay(Motor_Delay);
     digitalWrite(Motor_Enable, Enable);
 }
 
@@ -194,12 +193,12 @@ loop() {
 // ===============================
 void 
 measure() {
+    // sound speed in air: 343.8 m/s 
     // ----- locals
     unsigned long start_time;           //microseconds
     unsigned long finish_time;          //microseconds
     unsigned long time_taken;           //microseconds
     unsigned long timeout;              //microseconds
-    unsigned long pause;                //microseconds
     boolean flag;
   
     // ----- generate 10uS start pulse
@@ -211,7 +210,7 @@ measure() {
     
     start_time = micros();
     // ----- set timeout radius
-    timeout = start_time + 18000;//15000;       //set timeout radius to 2.5 meters
+    timeout = start_time + 300*59;//set timeout radius to 400 cm
     // ----- measure first object distance
     flag = false;
     while(!flag) {
@@ -224,11 +223,10 @@ measure() {
     }
     else {
         // ----- calculate object distance(cm)
-        time_taken = finish_time - start_time;
+        time_taken = finish_time-start_time;
         Distance = ((float)time_taken) / 59;
         // ----- wait for first object echo to finish
-        pause = finish_time + 1000;                //1000uS means 17cm closest object spacing
-        while(pause > micros());                   //wait 1000uS
+        while(timeout > micros());
     }
 }
 
@@ -238,6 +236,7 @@ rotate() {
     digitalWrite(Motor_Step, HIGH);
     delay(Motor_Delay);
     digitalWrite(Motor_Step, LOW);
+    delay(Motor_Delay);
 }
 
 

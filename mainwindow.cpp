@@ -1,7 +1,12 @@
 //#define LOG_VERBOSE
+//#define LOG_VALUES
 
 #ifdef LOG_VERBOSE
-#include <QDebug>
+    #include <QDebug>
+#else
+    #ifdef LOG_VALUES
+        #include <QDebug>
+    #endif
 #endif
 
 #include "mainwindow.h"
@@ -83,10 +88,10 @@ MainWindow::ConnectToArduino() {
     if(serialPorts.isEmpty()) {
         #ifdef LOG_VERBOSE
             qDebug() << QString("No serial port available");
+            qDebug() << QString("No Arduino ready to use !");
+            qDebug() << QString("Retrying in 3 seconds");
         #endif
         connectionTimer.start(3000);
-        qDebug() << QString("No Arduino ready to use !");
-        qDebug() << QString("Retrying in 3 seconds");
         return;
     }
     connect(this, SIGNAL(arduinoFound()),
@@ -132,8 +137,8 @@ MainWindow::ConnectToArduino() {
         }
         #endif
     }
+    connectionTimer.start(3000);
     #ifdef LOG_VERBOSE
-        connectionTimer.start(3000);
         qDebug() << QString("No Arduino ready to use !");
         qDebug() << QString("Retrying in 3 seconds");
     #endif
@@ -217,8 +222,8 @@ MainWindow::onArduinoConnectionTimerTimeout() {
         }
         #endif
     }
-    #ifdef LOG_VERBOSE
         connectionTimer.start(3000);
+    #ifdef LOG_VERBOSE
         qDebug() << QString("No Arduino ready to use !");
         qDebug() << QString("Retrying in 3 seconds");
     #endif
@@ -379,7 +384,7 @@ MainWindow::executeCommand(QByteArray command) {
             polarSeries.replace(iStep, angle, distance);
             cartesianSeries.replace(iStep, x, y);
         }
-        #ifdef LOG_VERBOSE
+        #ifdef LOG_VALUES
             qDebug() << "Step#= " << iStep
                      << "Angle= " << angle
                      << "Rads = " << radiants
