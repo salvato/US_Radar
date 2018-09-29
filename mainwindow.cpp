@@ -26,8 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     polarSeries.setName("Distance [cm]");
     polarRadar.addSeries(&polarSeries);
-    polarSeries.attachAxis((QValueAxis*)polarRadar.axisX());
-    polarSeries.attachAxis((QValueAxis*)polarRadar.axisY());
+    polarSeries.attachAxis(polarRadar.axisX());
+    polarSeries.attachAxis(polarRadar.axisY());
 
     cartesianRadar.setTheme(QChart::ChartThemeBlueCerulean);
     cartesianRadar.setAnimationOptions(QChart::SeriesAnimations);
@@ -35,8 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     cartesianSeries.setName("Distance [cm]");
     cartesianRadar.addSeries(&cartesianSeries);
-    cartesianSeries.attachAxis((QValueAxis*)cartesianRadar.axisX());
-    cartesianSeries.attachAxis((QValueAxis*)cartesianRadar.axisY());
+    cartesianSeries.attachAxis(cartesianRadar.axisX());
+    cartesianSeries.attachAxis(cartesianRadar.axisY());
 
     ChartView* pChartView;
     pChartView = new ChartView();
@@ -104,10 +104,10 @@ MainWindow::ConnectToArduino() {
             this, SLOT(onArduinoConnectionTimerTimeout()));
 
     requestData.clear();
-    requestData.append(quint8(StartMarker));
-    requestData.append(quint8(4));
-    requestData.append(quint8(AreYouThere));
-    requestData.append(quint8(EndMarker));
+    requestData.append(qint8(StartMarker));
+    requestData.append(qint8(4));
+    requestData.append(qint8(AreYouThere));
+    requestData.append(qint8(EndMarker));
 
     for(currentPort=0; currentPort<serialPorts.count(); currentPort++) {
         serialPortinfo = serialPorts.at(currentPort);
@@ -149,10 +149,10 @@ void
 MainWindow::stopArduino() {
     if(serialPort.isOpen()) {
         requestData.clear();
-        requestData.append(quint8(StartMarker));
-        requestData.append(quint8(4));
-        requestData.append(quint8(StopSending));
-        requestData.append(quint8(EndMarker));
+        requestData.append(qint8(StartMarker));
+        requestData.append(qint8(4));
+        requestData.append(qint8(StopSending));
+        requestData.append(qint8(EndMarker));
         writeSerialRequest(requestData);
         serialPort.waitForBytesWritten();
         QThread::sleep(1);
@@ -170,10 +170,10 @@ MainWindow::onArduinoFound() {
     currElem = 0;
     angle    = 0;
     requestData.clear();
-    requestData.append(quint8(StartMarker));
-    requestData.append(quint8(4));
-    requestData.append(quint8(StartSending));
-    requestData.append(quint8(EndMarker));
+    requestData.append(qint8(StartMarker));
+    requestData.append(qint8(4));
+    requestData.append(qint8(StartSending));
+    requestData.append(qint8(EndMarker));
     writeSerialRequest(requestData);
 }
 
@@ -247,14 +247,14 @@ MainWindow::onSerialDataAvailable() {
     }
     while(responseData.count() > 0) {
         // Do we have a complete command ?
-        int iStart = responseData.indexOf(quint8(StartMarker));
+        int iStart = responseData.indexOf(qint8(StartMarker));
         if(iStart == -1) {
             responseData.clear();
             return;
         }
         if(iStart > 0)
             responseData.remove(0, iStart);
-        int iEnd   = responseData.indexOf(quint8(EndMarker));
+        int iEnd   = responseData.indexOf(qint8(EndMarker));
         if(iEnd == -1) return;
         executeCommand(decodeResponse(responseData.left(responseData[1])));
         responseData.remove(0, responseData[1]);
@@ -277,7 +277,7 @@ MainWindow::decodeResponse(QByteArray response) {
         if((quint8(response[i]) == quint8(SpecialByte))) {
             i++;
             if(i<response.count()) {
-                decodedResponse.append(quint8(SpecialByte)+quint8(response[i]));
+                decodedResponse.append(qint8(SpecialByte)+quint8(response[i]));
             }
             else { // Not enough character received
                 decodedResponse.clear();
@@ -285,7 +285,7 @@ MainWindow::decodeResponse(QByteArray response) {
            }
         }
         else
-            decodedResponse.append(quint8(response[i]));
+            decodedResponse.append(qint8(response[i]));
     }
     if(decodedResponse.count() != 0)
         decodedResponse[0] = decodedResponse[0]-2;
@@ -318,7 +318,7 @@ MainWindow::executeCommand(QByteArray command) {
     }
 
     if(quint8(command[1]) == quint8(AngleMarker)) {
-        quint16 iAngle = (quint8(command[3]) << 8) + quint8(command[2]);
+        int iAngle = (quint8(command[3]) << 8) + quint8(command[2]);
         if(starting)
             if(angle > iAngle) {
                 starting = false;
@@ -334,7 +334,7 @@ MainWindow::executeCommand(QByteArray command) {
     }
 
     if(quint8(command[1]) == quint8(DistMarker)) {
-        quint16 iDist = (quint8(command[3]) << 8) + quint8(command[2]);
+        int iDist = (quint8(command[3]) << 8) + quint8(command[2]);
         distance = double(iDist);
         double radiants = M_PI*angle/180.0;
         double x = distance*cos(radiants);
@@ -369,8 +369,8 @@ MainWindow::executeCommand(QByteArray command) {
 
     // ValuesMarker
     if(quint8(command[1]) == quint8(ValuesMarker)) {
-        quint16 iStep = (quint8(command[3]) << 8) + quint8(command[2]);
-        quint16 iDist = (quint8(command[5]) << 8) + quint8(command[4]);
+        int iStep = (quint8(command[3]) << 8) + quint8(command[2]);
+        int iDist = (quint8(command[5]) << 8) + quint8(command[4]);
         angle = double(iStep)*angleStep;
         distance = double(iDist);
         double radiants = M_PI*angle/180.0;
@@ -429,15 +429,15 @@ void
 MainWindow::wheelEvent(QWheelEvent *event) {
     int degrees = event->delta() / 16;
     if(pCurrentChart == &polarRadar) {
-        QValueAxis* pAxis = (QValueAxis*)polarRadar.axisY();
+        QValueAxis* pAxis = static_cast<QValueAxis*>(polarRadar.axisY());
         if((degrees > 0) &&  (pAxis->max() > 10.0))
             pAxis->setMax(pAxis->max() - 5.0);
         else if(degrees < 0)
             pAxis->setMax(pAxis->max() + 5.0);
     }
     else {
-        QValueAxis* pAxisX = (QValueAxis*)cartesianRadar.axisX();
-        QValueAxis* pAxisY = (QValueAxis*)cartesianRadar.axisY();
+        QValueAxis* pAxisX = static_cast<QValueAxis*>(cartesianRadar.axisX());
+        QValueAxis* pAxisY = static_cast<QValueAxis*>(cartesianRadar.axisY());
         if((degrees > 0) &&  (pAxisX->max() > 10.0)) {
             pAxisX->setMax(pAxisX->max() - 5.0);
             pAxisX->setMin(pAxisX->min() + 5.0);
